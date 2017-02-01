@@ -84,8 +84,8 @@
     use vrbls
     IMPLICIT NONE; SAVE
 
-    CHARACTER*12 :: PAR_VERSION = "conf_only_v0"
-    CHARACTER*12 :: version_str
+    CHARACTER*16 :: PAR_VERSION = "spins_only_v0"
+    CHARACTER*16 :: version_str
 
     integer :: n_print
     real*8 :: step_p, step_w, step_m, step_t, step
@@ -171,7 +171,7 @@
 	open(1,file=trim(fname))
 
     read(1, *) version_str
-    if(trim(adjustl(version_str)) /= PAR_VERSION)then
+    if(trim(adjustl(version_str)) /= trim(adjustl(PAR_VERSION)))then
         print*, "par version: expected ", PAR_VERSION, ", got ", version_str
         STOP
     endif
