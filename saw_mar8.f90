@@ -349,53 +349,52 @@
 
 ! -------------------------------- Main MC loop :)
 
-!	DO;
+	DO;
 
-!      step=step+1.d0; i_p=i_p+1; 	i_w=i_w+1;  i_m=i_m+1
+        step=step+1.d0; i_p=i_p+1; 	i_w=i_w+1;  i_m=i_m+1
 
+        r=rndm() 	 
+        IF     (r<=prob(1))THEN; CALL move_masha
+	    else if(r<=prob(2))THEN; CALL move_ira
+        else if(r<=prob(3))THEN; CALL reconnect
+        ELSE; PRINT*,'Update-> Something wrong: r=',r; STOP
+        ENDIF
 
-!      r=rndm() 	 
-!      IF     (r<=prob(1))THEN; CALL move_masha
-!	else if(r<=prob(2))THEN; CALL move_ira
-!      else if(r<=prob(3))THEN; CALL reconnect
-!      ELSE; PRINT*,'Update-> Something wrong: r=',r; STOP
-!      ENDIF
-!
-!! if the size is > N, then recalc.
-!	if( any( abs(vect)>=N ) ) call recalc
-!	
-!	call measure_cheap
-!
-!  !    if(i_m==step_m)then; i_m=0; call measure_expensive; endif
-!      if(i_p==step_p)then; i_p=0; call prnt; endif
-!      if(i_w==step_w)then; i_w=0; call wrt; endif
-!
-!
-!      ENDDO
+        ! if the size is > N, then recalc.
+	    if( any( abs(vect)>=N ) ) call recalc
+	
+	    call measure_cheap
 
+        !    if(i_m==step_m)then; i_m=0; call measure_expensive; endif
+        if(i_p==step_p)then; i_p=0; call prnt; endif
+        if(i_w==step_w)then; i_w=0; call wrt; endif
 
-		do;
+!----------------------   spins
 
-	step = step + 1.d0      ! replica #
+!    ENDDO
+!		do;
 
-! do 10^6 conformational updates
-	do i_m=1, int(1d6)
-	      r=rndm() 	 
-	      if     (r<=prob(1))THEN; CALL move_masha
-	      else if(r<=prob(2))THEN; CALL move_ira
-	      else if(r<=prob(3))THEN; CALL reconnect
-	      else; PRINT*,'Update-> Something wrong: r=',r; STOP
-	      endif
-	enddo
+!	step = step + 1.d0      ! replica #
 
-	print*
-	print*,'====================================================', step
-	print*,' current conformation : nn = ',nn_tot,'  R2 = ',sum(vect**2)
-!	if(nn_tot==0)then
-	  call cluster_stuff
-	  call check ; print*,' post-cluster check ok !'
-!	  pause
-!	endif
+!! do 10^6 conformational updates
+!	do i_m=1, int(1d6)
+!	      r=rndm() 	 
+!	      if     (r<=prob(1))THEN; CALL move_masha
+!	      else if(r<=prob(2))THEN; CALL move_ira
+!	      else if(r<=prob(3))THEN; CALL reconnect
+!	      else; PRINT*,'Update-> Something wrong: r=',r; STOP
+!	      endif
+!	enddo
+
+!	print*
+!	print*,'====================================================', step
+!	print*,' current conformation : nn = ',nn_tot,'  R2 = ',sum(vect**2)
+!!	if(nn_tot==0)then
+!	  call cluster_stuff
+!	  call check ; print*,' post-cluster check ok !'
+!!	  pause
+!!	endif
+!-------------------- spins
 
 			if( checktime() > time_limit )then
 
@@ -417,7 +416,7 @@
 	stop
 	endif
 
-		enddo
+		enddo    !  main MC loop
 
 
 	END SUBROUTINE MC
@@ -1635,12 +1634,12 @@
 	real*8 :: av_o,err_o
 	logical :: conv
 
-	real*8, parameter :: LIMIT = 0.05    ! convergence limit: if an errorbar fluctuates within 5%, then it has probably converged :)
+    real*8, parameter :: LIMIT = 0.05    ! convergence limit: if an errorbar fluctuates within 5%, then it has probably converged :)
 
-	real*8  :: av, err, arr1(1:n), zb1
-	integer :: i, n1, jj
-     	real*8 :: prev, dummy
-	real*8, allocatable :: delta(:)
+    real*8  :: av, err, arr1(1:n), zb1
+    integer :: i, n1, jj
+    real*8 :: prev, dummy
+    real*8, allocatable :: delta(:)
 
       zb1 = 1.d0*zb;       arr1(1:n) = arr(1:n); n1=n;  jj=1
 
