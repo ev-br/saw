@@ -21,10 +21,10 @@
 	integer  :: spin_b_n, spin_i_b    ! filled block nbr. & current nbr. of measurements 
 	                                          ! in the (b_n+1)-th block
 	real*8 :: spin_Z
-	real*8 :: esti_magn, esti_magn2, esti_absmagn
+	real*8 :: esti_magn, esti_magn2, esti_absmagn, esti_magn4
 	real*8 :: av_n_cl, i_cl_upd    ! av. cluster size & # of cluster updates
 
-	real*8, allocatable :: magn_stat(:),magn2_stat(:), absmagn_stat(:)
+	real*8, allocatable :: magn_stat(:),magn2_stat(:), absmagn_stat(:), magn4_stat(:)
 
 
 
@@ -237,7 +237,8 @@
 !--------- 'naive' statistics
 	esti_magn = esti_magn + 1.d0*magn/(L1)
 	esti_magn2 = esti_magn2 + (1.d0*magn/(L1))**2
-	esti_absmagn = esti_absmagn + abs(1.d0*magn/(L1))	
+	esti_magn4 = esti_magn4 + (1.d0*magn/(L1))**4
+	esti_absmagn = esti_absmagn + abs(1.d0*magn/(L1))
 	spin_Z = spin_Z+1.d0
 !----------------------------
 
@@ -251,6 +252,7 @@
 	    spin_b_n = spin_b_n + 1; spin_i_b=0
 	    magn_stat(spin_b_n) = esti_magn; esti_magn = 0.d0
 	    magn2_stat(spin_b_n) = esti_magn2; esti_magn2 = 0.d0
+	    magn4_stat(spin_b_n) = esti_magn4; esti_magn4 = 0.d0    	
 	    absmagn_stat(spin_b_n)=esti_absmagn; esti_absmagn=0.d0
 
 		if(spin_b_n == b_n_max)then     ! collate blocks: 1000 -> 500 twice bigger blocks
@@ -261,13 +263,14 @@
 	            call wrt
 	            print*; print*; print*
 	            print*,'***********************************************'
-			  print*,'***********  BLOCK SIZE IS TOO LARGE, exiting'
+			    print*,'***********  BLOCK SIZE IS TOO LARGE, exiting'
 	            print*,'***********************************************'
 	            stop
 	          endif
 
 	          call collate( magn_stat(:), spin_b_n )
 	          call collate( magn2_stat(:), spin_b_n )
+	          call collate( magn4_stat(:), spin_b_n )
 	          call collate( absmagn_stat(:), spin_b_n )
 		  spin_b_n = spin_b_n/2; spin_Z_b = spin_Z_b * 2.d0
 		endif
@@ -285,7 +288,7 @@
       implicit none
 	logical :: conv, conv_all
 	real*8 :: av_o, err_o
-	real*8 :: av_m, err_m, av_absm, err_absm, av_m2, err_m2	
+	real*8 :: av_m, err_m, av_absm, err_absm, av_m2, err_m2, av_m4, err_m4
 	character*99 :: fname
 
 
@@ -366,6 +369,24 @@
 !	  call mrg(magn2_stat(1:spin_b_n),spin_b_n,spin_Z_b)
 
 
+! |magn|^4
+	call mrg_conv(magn4_stat(1:spin_b_n),spin_b_n,spin_Z_b,av_o,err_o,conv)
+
+	if(conv)then 
+        	print 788, av_o, err_o 
+	else
+		print 789, av_o, err_o
+	endif
+ 788    format(4x,'<M^4> = ',g12.5,2x,' +/- ',g12.5,8x,'   /conv/ ')
+ 789    format(4x,'<M^4> = ',g12.5,2x,' +/- ',g12.5,8x,'   /unconv/ ')
+
+	av_m4=av_o ; err_m4 = err_o
+	conv_all = conv.and.conv_all
+!---------------------------------------------
+
+
+
+
 !------------- check convergence
 	if(conv_all)then
 
@@ -378,6 +399,7 @@
 		write(1,*)av_m, err_m
 		write(1,*)av_absm, err_absm
 		write(1,*)av_m2, err_m2
+		write(1,*)av_m4, err_m4
 		write(1,*)'-----'
 	   close(1)
 
@@ -421,7 +443,8 @@
 ! init spin statistics
 	spin_Z=0.d0
 	esti_magn=0.d0; 
-	esti_magn2=0.d0 
+	esti_magn2=0.d0
+	esti_magn4=0.d0
 	esti_absmagn=0.d0
 
 	av_n_cl = 0
@@ -430,6 +453,7 @@
 
 	allocate( magn_stat(1:b_n_max) )
 	allocate( magn2_stat(1:b_n_max) )
+	allocate( magn4_stat(1:b_n_max) )
 	allocate( absmagn_stat(1:b_n_max) )
 
 	spin_b_n=0;   spin_i_b=0;   spin_Z_b=L+1;  ! something to start with
@@ -475,7 +499,7 @@
 	deallocate( whichsite )
 	deallocate( pocket, cluster_ )
 
-        deallocate( magn_stat, magn2_stat, absmagn_stat )
+    deallocate( magn_stat, magn2_stat, magn4_stat, absmagn_stat )
 
 	end subroutine cluster_cleanup
 
