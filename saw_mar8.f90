@@ -84,6 +84,9 @@
     use vrbls
     IMPLICIT NONE; SAVE
 
+    CHARACTER*12 :: PAR_VERSION = "conf_only_v0"
+    CHARACTER*12 :: version_str
+
     integer :: n_print
     real*8 :: step_p, step_w, step_m, step_t, step
     real*8 :: i_p, i_w, i_m, i_t
@@ -167,6 +170,11 @@
 ! read parameter file
 	open(1,file=trim(fname))
 
+    read(1, *) version_str
+    if(trim(adjustl(version_str)) /= PAR_VERSION)then
+        print*, "par version: expected ", PAR_VERSION, ", got ", version_str
+        STOP
+    endif
 	read(1,*)d;    dd = d+d;    
 	read(1,*)N;    Nsite=N**d
 	read(1,*)L;    L23 = L**(2.d0/3.d0); 
