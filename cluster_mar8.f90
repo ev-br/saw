@@ -313,9 +313,9 @@
 	call mrg_conv(magn_stat(1:spin_b_n),spin_b_n,spin_Z_b,av_o,err_o,conv)
 
 	if(conv)then 
-        	print 778, av_o, err_o 
+       	print 782, "<M>  ", av_o, err_o 
 	else
-		print 779, av_o, err_o
+		print 783, "<M>  ", av_o, err_o
 	endif
  778    format(4x,'<M>   = ',g12.5,2x,' +/- ',g12.5,8x,'   /conv/ ')
  779    format(4x,'<M>   = ',g12.5,2x,' +/- ',g12.5,8x,'   /unconv/ ')
@@ -333,33 +333,25 @@
 	call mrg_conv(absmagn_stat(1:spin_b_n),spin_b_n,spin_Z_b,av_o, err_o,conv)
 
 	if(conv)then 
-        	print 780, av_o, err_o 
+        print 782, "<|M|>", av_o, err_o 
 	else
-		print 781, av_o, err_o
+		print 783, "<|M|>", av_o, err_o
 	endif
- 780    format(4x,'<|M|> = ',g12.5,2x,' +/- ',g12.5,8x,'   /conv/ ')
- 781    format(4x,'<|M|> = ',g12.5,2x,' +/- ',g12.5,8x,'   /unconv/ ')
 
 	av_absm=av_o ; err_absm = err_o
 	conv_all = conv.and.conv_all
-
-!	  print*; 
-!	  print*,'            doing < |M| > : '
-!	  call mrg(absmagn_stat(1:spin_b_n),spin_b_n,spin_Z_b)
-
-
 
 
 ! |magn|^2
 	call mrg_conv(magn2_stat(1:spin_b_n),spin_b_n,spin_Z_b,av_o,err_o,conv)
 
 	if(conv)then 
-        	print 782, av_o, err_o 
+        print 782, "<M^2>", av_o, err_o
 	else
-		print 783, av_o, err_o
+		print 783, "<M^2>", av_o, err_o
 	endif
- 782    format(4x,'<M^2> = ',g12.5,2x,' +/- ',g12.5,8x,'   /conv/ ')
- 783    format(4x,'<M^2> = ',g12.5,2x,' +/- ',g12.5,8x,'   /unconv/ ')
+ 782    format(4x, A, ' = ', g12.5,2x, ' +/- ', g12.5,8x, '   /conv/ ')
+ 783    format(4x, A, ' = ', g12.5,2x, ' +/- ', g12.5,8x, '   /unconv/ ')
 
 	av_m2=av_o ; err_m2 = err_o
 	conv_all = conv.and.conv_all
@@ -373,12 +365,10 @@
 	call mrg_conv(magn4_stat(1:spin_b_n),spin_b_n,spin_Z_b,av_o,err_o,conv)
 
 	if(conv)then 
-        	print 788, av_o, err_o 
+        print 782, "<M^4>", av_o, err_o 
 	else
-		print 789, av_o, err_o
+		print 783, "<M^4>", av_o, err_o
 	endif
- 788    format(4x,'<M^4> = ',g12.5,2x,' +/- ',g12.5,8x,'   /conv/ ')
- 789    format(4x,'<M^4> = ',g12.5,2x,' +/- ',g12.5,8x,'   /unconv/ ')
 
 	av_m4=av_o ; err_m4 = err_o
 	conv_all = conv.and.conv_all
