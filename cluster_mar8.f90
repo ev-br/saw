@@ -294,7 +294,7 @@
 
 	print*
 	print*,'------------------- #sweeps = ',cl_step/L1
-	print*,' J/T   = ', JT, ' L1 =  ', L1
+    write(6, '("  J/T = ", G12.7, "  U/T = ", G12.7, "  L+1 = ", G12.7)')JT, U, L1
 !	print*,' <m>   = ', esti_magn/spin_Z
 !	print*,' <m^2> = ', esti_magn2/spin_Z
 !	print*,' <|m|> = ', esti_absmagn/spin_Z
@@ -374,7 +374,7 @@
 	conv_all = conv.and.conv_all
 !---------------------------------------------
 
-
+    print*, "   Binder cum = ", 1.0 - av_m4 / 3.0 / av_m2**2
 
 
 !------------- check convergence
@@ -384,12 +384,12 @@
 	! save the results for the current conformation 
 	   fname='replicas'//trim(suffix)//'.dat'
 	   open(1,file=trim(fname), position='append')
-		write(1,*)step
-		write(1,*)nn_tot, 1.d0*sum(vect**2)
-		write(1,*)av_m, err_m
-		write(1,*)av_absm, err_absm
-		write(1,*)av_m2, err_m2
-		write(1,*)av_m4, err_m4
+		write(1,*)step, '     ! step'
+		write(1,*)nn_tot, 1.d0*sum(vect**2), '   ! nn_tot, vect**2'
+		write(1,*)av_m, err_m, '    ! av_m, err_m'
+		write(1,*)av_absm, err_absm, '    ! av_absm, err_absm'
+		write(1,*)av_m2, err_m2, '    ! av_m2, err_m2'
+		write(1,*)av_m4, err_m4, '    ! av_m4, err_m4'
 		write(1,*)'-----'
 	   close(1)
 
