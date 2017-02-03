@@ -1,5 +1,6 @@
 from __future__ import division, print_function, absolute_import
 import sys
+import numpy as np
 
 def split_iter(lst, token):
     """Split a list on the token, yield head and tail."""
@@ -35,7 +36,7 @@ def convert_replica(lst):
         names = pair[1].strip().split(',')
         values = [float(_) for _ in pair[0].split()]
         for name, val in zip(names, values):
-            r[name] = val
+            r[name.strip()] = val
 
     return r
 
@@ -55,9 +56,22 @@ if __name__ == "__main__":
     replicas = [convert_replica(str_replica) for str_replica in str_replicas]
 
     # compute the Binder cumulant
-    magn2 = [_["av_m2"] for _ in replicas]
-    magn4 = [_["av_m4"] for _ in replicas]
-    Q = [1. - m4/3.0/m2**2 for m2, m4 in zip(magn2, magn4)]
+    m2 = np.asarray([_["av_m2"] for _ in replicas])
+    err_m2 = np.asarray([_["err_m2"] for _ in replicas])
 
-    print("num replicas = ", len(Q))
-    print("Binder Q = ", sum(Q)/len(Q))
+    m4 = np.asarray([_["av_m4"] for _ in replicas])
+    err_m4 = np.asarray([_["err_m4"] for _ in replicas])
+
+    Q = 1. - m4/3.0/m2**2
+    err_Q = (2*err_m2 / m2)**2 + (err_m4 / m4)
+    err_Q = np.sqrt(err_Q) * Q
+
+    print(Q)
+    print(err_Q)
+
+    print("num replicas = ", Q.size)
+    print("Binder Q = ", Q.mean(), Q.std())
+
+    import matplotlib.pyplot as plt
+    plt.hist(Q)
+    plt.show()
