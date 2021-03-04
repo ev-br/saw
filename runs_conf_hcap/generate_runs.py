@@ -21,7 +21,7 @@ r"""#!/bin/bash
 #SBATCH -n 1
 #SBATCH -t 1-00:00
 
-~/SAW/conf/a.out %(suffix)s
+~/SAW/conf/a.out %(suffix)s > out%(suffix)s
 """
 
 
@@ -47,8 +47,8 @@ par_template = read_par_template("par_L500.template")
 
 slurmfnames = []
 
-for L in [500]:
-    for U in [0.5, 0.6, 0.7]:
+for L in [250, 500, 1000]:
+    for U in [0.5, 0.55, 0.6, 0.65, 0.7, 0.8]:
         dct = base_dct.copy()
         dct["L"] = L
         dct["U"] = U
@@ -65,7 +65,7 @@ for L in [500]:
 
 
 for sf in slurmfnames:
-    print("sbatch ", slurmfname)
+    print("sbatch " + sf)
 
 
 
