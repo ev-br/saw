@@ -1013,10 +1013,10 @@
 	read(1,*)dist2_, dist2_stat
 	read(1,*)dist2_distr
 	read(1,*)nn_distr
-	read(1,*)i_acorr     ! a/corr stat
-	read(1,*)ene_acorr
-	read(1,*)R2_acorr
-	read(1,*)grsb_acorr
+!	read(1,*)i_acorr     ! a/corr stat
+!	read(1,*)ene_acorr
+!	read(1,*)R2_acorr
+!	read(1,*)grsb_acorr
 
 	close(1)
 

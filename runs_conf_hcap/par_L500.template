@@ -4,8 +4,8 @@ conf_only_v0
 %(L)s      ! L
 %(U)s   ! U/T
 0.0       ! J/T
-0       ! 0 if new configuration, 1 if old one
-0       ! 0 if new statistics,    1 if old one
+1       ! 0 if new configuration, 1 if old one
+1       ! 0 if new statistics,    1 if old one
 0.0d0  ! initial U
 1e2      ! * L**2 steps of thermallization 
 1.d9    ! step for printing
