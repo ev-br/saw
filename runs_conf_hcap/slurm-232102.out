@@ -1,0 +1,2 @@
+ibwarn: [268228] mad_rpc_open_port: can't open UMAD port ((null):1)
+slurmstepd: error: *** JOB 232102 ON cn-040 CANCELLED AT 2021-03-04T13:23:50 ***

@@ -1,0 +1,6 @@
+#!/bin/bash
+#SBATCH --job-name=_U0.6L500
+#SBATCH -n 1
+#SBATCH -t 1-00:00
+
+~/SAW/conf/a.out _U0.6L500 > out_U0.6L500

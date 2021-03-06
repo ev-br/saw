@@ -1,0 +1,12 @@
+At line 1019 of file saw_mar8.f90 (unit = 1, file = 'stat_U0.5L250.dat')
+Fortran runtime error: End of file
+
+Error termination. Backtrace:
+#0  0x7f50cb0a1d36 in list_formatted_read_scalar
+	at ../../../libgfortran/io/list_read.c:2309
+#1  0x405817 in ???
+#2  0x40b69a in ???
+#3  0x40118c in ???
+#4  0x7f50ca38d504 in ???
+#5  0x4011ba in ???
+#6  0xffffffffffffffff in ???

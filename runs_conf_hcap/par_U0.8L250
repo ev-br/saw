@@ -1,0 +1,18 @@
+conf_only_v0
+2       ! dimensionality
+350     ! Lattice size
+250      ! L
+0.8   ! U/T
+0.0       ! J/T
+1       ! 0 if new configuration, 1 if old one
+1       ! 0 if new statistics,    1 if old one
+0.0d0  ! initial U
+1e2      ! * L**2 steps of thermallization 
+1.d9    ! step for printing
+1.d9    ! step for writing to disk
+1000.d0    ! step for measuring, 'expensive'
+0.4d0     ! move probability
+0.2d0     ! reconnect probability
+20.0       ! time limit, hrs
+4836 2748  ! seeds for the random number generator
+
