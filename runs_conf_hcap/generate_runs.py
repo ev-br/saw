@@ -19,7 +19,7 @@ SLURM_TEMPLATE = \
 r"""#!/bin/bash
 #SBATCH --job-name=%(suffix)s
 #SBATCH -n 1
-#SBATCH -t 1-00:00
+#SBATCH -t 7-00:00
 
 ~/SAW/conf/a.out %(suffix)s > out%(suffix)s
 """

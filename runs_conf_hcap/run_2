@@ -1,0 +1,12 @@
+sbatch slurm_U0.62L250.sbatch
+sbatch slurm_U0.64L250.sbatch
+sbatch slurm_U0.66L250.sbatch
+sbatch slurm_U0.68L250.sbatch
+sbatch slurm_U0.62L500.sbatch
+sbatch slurm_U0.64L500.sbatch
+sbatch slurm_U0.66L500.sbatch
+sbatch slurm_U0.68L500.sbatch
+sbatch slurm_U0.62L1000.sbatch
+sbatch slurm_U0.64L1000.sbatch
+sbatch slurm_U0.66L1000.sbatch
+sbatch slurm_U0.68L1000.sbatch
