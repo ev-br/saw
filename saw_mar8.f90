@@ -66,6 +66,8 @@
 	real*8, allocatable  ::  dist2_distr(:),nn_distr(:) 
 	integer :: dist2_max,nn_distr_max
 
+    real*8, allocatable :: frac_nn(:)   ! number of contacts per monomer
+    real*8 :: Z_frac_nn
 
 !------------------ autocorr stat
 	integer, parameter :: n_acorr = 10000
@@ -373,7 +375,7 @@
 	
 	    call measure_cheap
 
-        !    if(i_m==step_m)then; i_m=0; call measure_expensive; endif
+        if(i_m==step_m)then; i_m=0; call measure_expensive; endif
         if(i_p==step_p)then; i_p=0; call prnt; endif
         if(i_w==step_w)then; i_w=0; call wrt; endif
 
@@ -779,15 +781,34 @@
 !-------------------
 !---- Measurements
 !-------------------
-      SUBROUTINE measure_expensive
-	use vrbls; use ctrls
-      implicit none 
-	real*8 :: xxx
-	integer :: j
+    SUBROUTINE measure_expensive
+    use vrbls; use ctrls
+    implicit none 
+    real*8, dimension(dd) :: frac
+    integer :: site, dir, j, nn
 
 
+!----- Measure #s of neighbors per site
+    frac = 0.d0
+	site=ira;
+	do;
+    	dir=ch2o(charge(site));	site=ass(dir,site) 
 
-      END SUBROUTINE measure_expensive
+	    ! nn
+        nn = 0
+	    do j=1,dd; if(charge(ass(j,site))/=0)nn=nn+1 ! number of neighbours
+	    enddo
+
+        frac(nn) = frac(nn) + 1.d0/L
+
+	  	if(site==masha)exit
+	enddo;
+    frac_nn = frac_nn + frac
+    Z_frac_nn = Z_frac_nn + 1.d0
+
+    !print*, "frac_neighb = ", frac, "sum = ", sum(frac)
+
+    END SUBROUTINE measure_expensive
 
 
 
@@ -1045,6 +1066,8 @@
 	if(allocated(dist2_distr))deallocate(dist2_distr)
 	if(allocated(nn_distr))deallocate(nn_distr)
 
+    if(allocated(frac_nn))deallocate(frac_nn)
+
 	allocate( nn_stat(1:b_n_max) )
 	allocate( nn2_stat(1:b_n_max) )
 	allocate( dist2_stat(1:b_n_max) )
@@ -1061,6 +1084,10 @@
 
 	dist2_distr=0.d0
 	nn_distr=0.d0
+
+    allocate( frac_nn(1:dd))
+    frac_nn = 0.d0
+    Z_frac_nn = 0.d0
 
 !------------- a/corr stat
 	i_acorr=0
@@ -1320,7 +1347,7 @@
 	print*
       print*,'-------------------------', checktime()/3600,' hrs'
 	print*
-	print "(' MC step =  ',G9.2,' Z(mln) = ',G9.2,'Z_b/L = ',G9.2)",step/1d6, Z/1.d6, Z_b/L
+	print "(' MC step =  ',G9.2,' Z(mln) = ',G9.2,' Z_b/L = ',G9.2)",step/1d6, Z/1.d6, Z_b/L
 	print "(' N_lat = ',I4,'  L  = ',I6,'  U = ',G11.5)",N,L,U
 	print "(' exp(U) = ',G9.3 )",eu(1)
 
@@ -1363,6 +1390,11 @@
 	  print*; 
 	  print*,'            doing <R**2>_: '
 	  call mrg(dist2_stat(1:b_n),b_n,Z_b)
+
+! num_neighb
+      print*,' --- frac_nn'
+      print "(4x, G9.3,' ', G9.3,' ', G9.3,' ', G9.3)", frac_nn / Z_frac_nn
+      print*, sum(frac_nn / Z_frac_nn)
 
 
 	else
