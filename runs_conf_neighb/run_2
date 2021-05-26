@@ -1,0 +1,3 @@
+../a.out _U0L200 > out_U0L200 &
+../a.out _U0L400 > out_U0L400 &
+

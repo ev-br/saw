@@ -1,0 +1,4 @@
+../a.out _U0L20 > out_U0L20 &
+../a.out _U0L50 > out_U0L50 &
+../a.out _U0L100 > out_U0L100 &
+
